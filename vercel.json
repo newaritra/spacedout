@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/horizons",
+      "destination": "https://ssd.jpl.nasa.gov/api/horizons.api"
+    }
+  ]
+}
