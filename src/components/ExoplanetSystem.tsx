@@ -1,8 +1,7 @@
-import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { radiusKmToRenderScale } from "../lib/bodyVisuals";
 import { Text } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import * as THREE from "three";
 
 type Planet = {
   name: string | null;
@@ -42,7 +41,7 @@ function Planet({ planet }: { planet: Planet }) {
     );
   });
 
-  const orbitRadius = (planet.semiMajorAxis || 0.05) * 0.25;
+//   const orbitRadius = (planet.semiMajorAxis || 0.05) * 0.25;
   const rawSize = (planet.radiusEarth || 1) * 0.0015;
   const size = Math.min(0.008, Math.max(0.001, rawSize));
 
@@ -63,11 +62,6 @@ function Planet({ planet }: { planet: Planet }) {
 }
 
 export default function ExoplanetSystem({ system }: { system: System }) {
-  const bodyScale = useMemo(() => {
-    return radiusKmToRenderScale(
-      system.star.radius ? system.star.radius * 695700 : null,
-    );
-  }, []);
   return (
     <group position={[system.position.x, system.position.y, system.position.z]}>
       {/* Star */}

@@ -1,12 +1,12 @@
-import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useState } from "react";
-import "./styles.css";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
-import { SolarSystem } from "./components/SolarSystem";
+import { useEffect, useMemo, useState } from "react";
+import * as THREE from "three";
 import type { System } from "./components/ExoplanetSystem";
 import ExoplanetSystem from "./components/ExoplanetSystem";
+import { SolarSystem } from "./components/SolarSystem";
+import "./styles.css";
 
 type CosmicBody = {
   id: string | null;
@@ -132,17 +132,13 @@ function NearbySystems({ systems }: { systems: System[] }) {
 
 export default function App() {
   const [stars, setStars] = useState<CosmicBody[]>([]);
-  const [zoomMode, setZoomMode] = useState<"galaxy" | "solar">("galaxy");
-  const [sunPosition, setSunPosition] = useState<[number, number, number]>([
-    0, 0, 0,
-  ]);
 
   const [systems, setSystems] = useState<System[]>([]);
 
   useEffect(() => {
     fetch("/exoplanet_systems.json")
       .then((r) => r.json())
-      .then((data) => {
+      .then((data: System[]) => {
         // apply SAME scaling as HYG
         const scaled = data.slice(0, 10000).map((s) => ({
           ...s,
@@ -160,7 +156,7 @@ export default function App() {
   useEffect(() => {
     fetch("/stars.json")
       .then((r) => r.json())
-      .then((data) => {
+      .then((data: CosmicBody[]) => {
         const scaled = data.slice(0, 10000).map((s) => ({
           ...s,
           x: s.x / 50,
@@ -173,7 +169,7 @@ export default function App() {
         // 🔥 FIND THE SUN
         const sun =
           scaled.find((s) => s.name === "Sol") ||
-          scaled.find((s) => parseInt(s.dist) === 0);
+          scaled.find((s) => s.dist === 0);
 
         console.log(
           "Looking for the Sun in dataset of",
@@ -185,7 +181,6 @@ export default function App() {
 
         if (sun) {
           console.log("Sun found:", sun);
-          setSunPosition([sun.x, sun.y, sun.z]);
         } else {
           console.warn("Sun not found in dataset");
         }

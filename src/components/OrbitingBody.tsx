@@ -1,14 +1,14 @@
-import { useMemo, useRef } from "react";
+import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useHorizonsBody } from "../hooks/useHorizonsBody";
-import { findOrbitSegment, interpolateOrbitPoint } from "../lib/horizons";
-import OrbitTrail from "./OrbitTrail";
 import {
   getBodyMaterialProps,
   radiusKmToRenderScale,
 } from "../lib/bodyVisuals";
-import { Center, Text, Text3D } from "@react-three/drei";
+import { findOrbitSegment, interpolateOrbitPoint } from "../lib/horizons";
+import OrbitTrail from "./OrbitTrail";
 
 type OrbitingBodyProps = {
   command: string;
@@ -56,7 +56,6 @@ export function OrbitingBody({
     }
     return getBodyMaterialProps(data.physical);
   }, [data]);
-  
 
   useFrame(({ clock }) => {
     if (!meshRef.current || !data || data.orbit.length < 2) return;
