@@ -49,7 +49,7 @@ export function getBodyMaterialProps(physical: BodyPhysicalData) {
 
   return {
     color,
-    emissive: color.clone().multiplyScalar(0.15),
+    emissive: color.clone().multiplyScalar(1.2),
     emissiveIntensity: visualMagToEmissiveIntensity(physical.visualMag),
     roughness: albedoToRoughness(physical.geometricAlbedo),
     metalness: 0,
