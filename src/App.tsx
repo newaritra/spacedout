@@ -7,6 +7,8 @@ import StarField from "./components/StarField";
 import useExoplanets from "./hooks/useExoplanets";
 import useStars from "./hooks/useStars";
 import "./styles.css";
+import useSmallBodies from "./hooks/useSmallBodies";
+import SmallBodies from "./components/SmallBodies";
 
 // function useMemoizedCenter(stars: CosmicBody[]) {
 //   const center = useMemo(() => {
@@ -30,10 +32,17 @@ import "./styles.css";
 export default function App() {
   const { data: stars } = useStars();
   const { data: systems } = useExoplanets();
+  const { data: smallBodies } = useSmallBodies();
   const center = [0, 0, 0];
 
   return (
-    <Canvas camera={{ position: [0, 0, 20], fov: 60, near: 0.1, far: 5000 }}>
+    <Canvas
+      onCreated={({ gl }) => {
+        // ensure context is explicitly released on unmount
+        return () => gl.dispose();
+      }}
+      camera={{ position: [0, 0, 20], fov: 60, near: 0.1, far: 5000 }}
+    >
       <CameraController target={center as [number, number, number]} />
 
       <EffectComposer>
@@ -41,8 +50,9 @@ export default function App() {
       </EffectComposer>
       <SolarSystem sunPosition={center as [number, number, number]} />
       <fog attach="fog" args={["#05070d", 15, 80]} />
-      <StarField stars={stars} />
-      <NearbySystems systems={systems} />
+      <StarField stars={stars || []} />
+      <NearbySystems systems={systems || []} />
+      <SmallBodies bodies={smallBodies || []} />
     </Canvas>
   );
 }

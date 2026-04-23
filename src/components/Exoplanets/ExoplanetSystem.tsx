@@ -1,5 +1,5 @@
 import { Line, Text } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -114,11 +114,22 @@ export default function ExoplanetSystem({ system }: { system: System }) {
   const starRadiusSolar = system.star.radius ?? 1;
   const size = Math.max(0.002, starRadiusSolar * STAR_SIZE_SCALE);
 
+  const { camera } = useThree();
+
   // Fix 3: stable reference, not recreated on every render
   const starPos = useMemo(() => new THREE.Vector3(0, 0, 0), []);
 
   return (
-    <group position={[system.position.x, system.position.y, system.position.z]}>
+    <group
+      onClick={() => {
+        camera.position.set(
+          system.position.x,
+          system.position.y,
+          system.position.z,
+        );
+      }}
+      position={[system.position.x, system.position.y, system.position.z]}
+    >
       <mesh>
         <sphereGeometry args={[size, 16, 16]} />
         <meshBasicMaterial color="#ffaa55" />
